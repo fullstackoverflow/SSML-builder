@@ -1,0 +1,44 @@
+{
+  "name": "@tosee/ssml-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/lib/index.js",
+  "types": "./dist/lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fullstackoverflow/busboy"
+  },
+  "scripts": {
+    "build": "tsc",
+    "coverage": "nyc --reporter=lcov --reporter=html npm run test && nyc report",
+    "test": "alsatian test/*.spec.ts",
+    "codecov": "codecov",
+    "postversion": "git push --tags",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "extension": [
+      ".ts"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "author": "tosee",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "alsatian": "^3.2.1",
+    "codecov": "^3.6.5",
+    "commitizen": "^4.0.4",
+    "cz-conventional-changelog": "^3.1.0",
+    "nyc": "^15.0.1",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^5.0.1",
+    "typescript": "^3.8.3"
+  }
+}
