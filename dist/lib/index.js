@@ -1,12 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var Level;
+(function (Level) {
+    Level["STRONG"] = "strong";
+    Level["MODERATE"] = "moderate";
+    Level["REDUCED"] = "reduced";
+})(Level = exports.Level || (exports.Level = {}));
+var Strengths;
+(function (Strengths) {
+    Strengths["NONE"] = "none";
+    Strengths["X_WEAk"] = "x-weak";
+    Strengths["WEAK"] = "weak";
+    Strengths["MEDIUM"] = "medium";
+    Strengths["STRONG"] = "strong";
+    Strengths["X_STRONG"] = "x-strong";
+})(Strengths = exports.Strengths || (exports.Strengths = {}));
+var Interpret;
+(function (Interpret) {
+    Interpret["CHARACTERS"] = "characters";
+    Interpret["SPELL_OUT"] = "spell-out";
+    Interpret["CARDINAL"] = "cardinal";
+    Interpret["NUMBER"] = "number";
+    Interpret["ORDINAL"] = "ordinal";
+    Interpret["DIGITS"] = "digits";
+    Interpret["FRACTION"] = "fraction";
+    Interpret["UNIT"] = "unit";
+    Interpret["DATA"] = "date";
+    Interpret["TIME"] = "time";
+    Interpret["TELEPHONE"] = "telephone";
+    Interpret["ADDRESS"] = "address";
+    Interpret["INTERJECTION"] = "interjection";
+    Interpret["EXPLETIVE"] = "expletive";
+})(Interpret = exports.Interpret || (exports.Interpret = {}));
 class Builder {
     constructor() {
         this.elements = [];
-        this.sayWithSSML = function (saying) {
-            this.elements.push(saying);
-            return this;
-        };
     }
     isInList(value, listOfValues, msg) {
         value = value.toLowerCase().trim();
@@ -72,9 +100,6 @@ class Builder {
     }
     ;
     pauseByStrength(strength) {
-        strength = strength.toLowerCase().trim();
-        var strengths = ['none', 'x-weak', 'weak', 'medium', 'strong', 'x-strong'];
-        this.isInList(strength, strengths, "The strength provided to Speech#pauseByStrength(..) was not valid. Received strength: " + strength);
         this.elements.push("<break strength='" + strength + "'/>");
         return this;
     }
@@ -94,8 +119,6 @@ class Builder {
     ;
     sayAs(options) {
         if (options.interpret) {
-            var listOfInterpret = ['characters', 'spell-out', 'cardinal', 'number', 'ordinal', 'digits', 'fraction', 'unit', 'date', 'time', 'telephone', 'address', 'interjection', 'expletive'];
-            this.isInList(options.interpret, listOfInterpret, "The interpret is invalid. Received this: " + options.interpret);
             if (options.format) {
                 this.elements.push("<say-as interpret-as=\'" + options.interpret + "\'" + " format=\'" + options.format + "'>" + options.word + "</say-as>");
                 return this;
@@ -127,11 +150,12 @@ class Builder {
     }
     ;
     emphasis(level, word) {
-        var levels = ['strong', 'moderate', 'reduced'];
-        if (levels.indexOf(level.toString()) < 0) {
-            throw new Error("The level provided to Speech#emphasis(..) was not valid. Received level: " + level);
-        }
         this.elements.push("<emphasis level='" + level + "'>" + this.escape(word) + "</emphasis>");
+        return this;
+    }
+    ;
+    sayWithSSML(saying) {
+        this.elements.push(saying);
         return this;
     }
     ;

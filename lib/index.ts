@@ -1,3 +1,35 @@
+export enum Level {
+    STRONG = 'strong',
+    MODERATE = 'moderate',
+    REDUCED = 'reduced'
+}
+
+export enum Strengths {
+    NONE = 'none',
+    X_WEAk = 'x-weak',
+    WEAK = 'weak',
+    MEDIUM = 'medium',
+    STRONG = 'strong',
+    X_STRONG = 'x-strong'
+}
+
+export enum Interpret {
+    CHARACTERS = 'characters',
+    SPELL_OUT = 'spell-out',
+    CARDINAL = 'cardinal',
+    NUMBER = 'number',
+    ORDINAL = 'ordinal',
+    DIGITS = 'digits',
+    FRACTION = 'fraction',
+    UNIT = 'unit',
+    DATA = 'date',
+    TIME = 'time',
+    TELEPHONE = 'telephone',
+    ADDRESS = 'address',
+    INTERJECTION = 'interjection',
+    EXPLETIVE = 'expletive'
+}
+
 export class Builder {
     private elements: string[] = [];
 
@@ -65,10 +97,7 @@ export class Builder {
         return this;
     };
 
-    pauseByStrength(strength: string) {
-        strength = strength.toLowerCase().trim();
-        var strengths = ['none', 'x-weak', 'weak', 'medium', 'strong', 'x-strong'];
-        this.isInList(strength, strengths, "The strength provided to Speech#pauseByStrength(..) was not valid. Received strength: " + strength);
+    pauseByStrength(strength: Strengths) {
         this.elements.push("<break strength='" + strength + "'/>");
         return this;
     };
@@ -86,10 +115,8 @@ export class Builder {
         return this;
     };
 
-    sayAs(options: { word: string, interpret: string, format: string }) {
+    sayAs(options: { word: string, interpret: Interpret, format: string }) {
         if (options.interpret) {
-            var listOfInterpret = ['characters', 'spell-out', 'cardinal', 'number', 'ordinal', 'digits', 'fraction', 'unit', 'date', 'time', 'telephone', 'address', 'interjection', 'expletive'];
-            this.isInList(options.interpret, listOfInterpret, "The interpret is invalid. Received this: " + options.interpret);
             if (options.format) {
                 this.elements.push("<say-as interpret-as=\'" + options.interpret + "\'" + " format=\'" + options.format + "'>" + options.word + "</say-as>");
                 return this;
@@ -119,16 +146,12 @@ export class Builder {
         return this;
     };
 
-    emphasis(level: number, word: string) {
-        var levels = ['strong', 'moderate', 'reduced'];
-        if (levels.indexOf(level.toString()) < 0) {
-            throw new Error("The level provided to Speech#emphasis(..) was not valid. Received level: " + level);
-        }
+    emphasis(level: Level, word: string) {
         this.elements.push("<emphasis level='" + level + "'>" + this.escape(word) + "</emphasis>");
         return this;
     };
 
-    sayWithSSML = function (saying) {
+    sayWithSSML(saying: string) {
         this.elements.push(saying);
         return this;
     };
